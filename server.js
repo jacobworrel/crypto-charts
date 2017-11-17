@@ -8,5 +8,3 @@ const app = new Koa();
 
 app.use(serve(__dirname + '/dist'));
 app.listen(PORT, HOST);
-
-console.log('listening on port 3000');
