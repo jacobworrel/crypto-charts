@@ -7,9 +7,10 @@ class Container extends Component {
     super(props)
     this.state = {
       data: [],
-      range: ''
+      range: '',
+      activeBtn: 'years'
     }
-    this.getData = this.getData.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     this.formatDateScales = this.formatDateScales.bind(this);
     this.formatTooltipLabel = this.formatTooltipLabel.bind(this);
   }
@@ -78,11 +79,21 @@ class Container extends Component {
     return moment.unix(date).format('MMMM Do YYYY, h:mm a');
   }
 
+  handleClick(range) {
+    this.getData(range);
+    this.setState({ activeBtn: range });
+  }
+
   render() {
     return (
       <div>
-        <h1>Crypto Charts</h1>
-        <PriceChart data={this.state.data} getData={this.getData} formatDateScales={this.formatDateScales} formatTooltipLabel={this.formatTooltipLabel} />
+        <PriceChart
+          data={this.state.data}
+          handleClick={this.handleClick}
+          formatDateScales={this.formatDateScales}
+          formatTooltipLabel={this.formatTooltipLabel}
+          activeBtn={this.state.activeBtn}
+        />
       </div>
     );
   }

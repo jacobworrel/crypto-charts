@@ -12,3 +12,11 @@
   color: #FFF;
   border-style: none;
 }
+
+.button:hover {
+  background-color: #A1BBFF;
+}
+
+.active {
+  background-color: #A1BBFF;
+}

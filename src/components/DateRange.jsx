@@ -3,10 +3,20 @@ import styles from './DateRange.css';
 
 const DateRange = (props) => (
   <div className={styles.container}>
-    <button className={styles.button} onClick={() => props.getData('days')}>1d</button>
-    <button className={styles.button} onClick={() => props.getData('weeks')}>7d</button>
-    <button className={styles.button} onClick={() => props.getData('months')}>1m</button>
-    <button className={styles.button} onClick={() => props.getData('years')}>1y</button>
+    <button
+      className={props.activeBtn === 'days' ? `${styles.active} ${styles.button}` : styles.button}
+      onClick={() => props.handleClick('days')}>
+      1d
+    </button>
+    <button
+      className={props.activeBtn === 'weeks' ? `${styles.active} ${styles.button}` : styles.button}
+      onClick={() => props.handleClick('weeks')}>7d</button>
+    <button
+      className={props.activeBtn === 'months' ? `${styles.active} ${styles.button}` : styles.button}
+      onClick={() => props.handleClick('months')}>1m</button>
+    <button
+      className={props.activeBtn === 'years' ? `${styles.active} ${styles.button}` : styles.button}
+      onClick={() => props.handleClick('years')}>1y</button>
   </div>
 );
 

@@ -1,12 +1,14 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import ChartTitle from './ChartTitle';
 import DateRange from './DateRange';
 import styles from './PriceChart.css';
 
 const PriceChart = (props) => (
   <div className={styles.container}>
+    <ChartTitle title="Ethereum (ETH)"/>
     <div>
-      <DateRange getData={props.getData}/>
+      <DateRange activeBtn={props.activeBtn} handleClick={props.handleClick}/>
       <LineChart
         width={889}
         height={382}
