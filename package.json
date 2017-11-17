@@ -1,18 +1,20 @@
 {
     "scripts": {
-        "dev": "webpack-dev-server --config webpack.config.js --progress --colors",
+        "dev": "webpack-dev-server --config webpack.config.dev.js --progress --colors",
+        "start": "node server.js",
+        "build": "webpack --config webpack.config.prod.js --progres --colors",
         "test": "jest"
     },
     "dependencies": {
-        "axios": "^0.16.2",
         "babel-polyfill": "^6.26.0",
+        "koa": "^2.4.1",
+        "koa-static": "^4.0.2",
         "moment": "^2.19.2",
         "prop-types": "^15.6.0",
         "react": "^16.0.0",
         "react-dom": "^16.0.0",
         "react-router-dom": "^4.2.2",
         "recharts": "^1.0.0-beta.1",
-        "sir-logalot": "^1.0.0",
         "webpack": "^3.8.1"
     },
     "devDependencies": {
@@ -34,6 +36,7 @@
         "react-hot-loader": "3.0.0-beta.6",
         "react-test-renderer": "^16.0.0",
         "style-loader": "^0.19.0",
+        "uglifyjs-webpack-plugin": "^1.0.1",
         "webpack-dev-server": "~2.3.0"
     },
     "engines": {
