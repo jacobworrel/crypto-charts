@@ -2,7 +2,7 @@
     "scripts": {
         "dev": "webpack-dev-server --config webpack.config.dev.js --progress --colors",
         "start": "node server.js",
-        "build": "webpack --config webpack.config.prod.js --progres --colors",
+        "build": "webpack --config webpack.config.prod.js --progress --colors",
         "test": "jest"
     },
     "dependencies": {
