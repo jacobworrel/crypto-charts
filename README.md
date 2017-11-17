@@ -1,23 +1,38 @@
-# React Redux Boilerplate
-React Redux boilerplate built off of [bare-minimum-react-hot-rr4-redux](https://github.com/nganbread/bare-minimum-react-hot-rr4-redux) by @nganbread.
-#### Notable additions:
-  * Jest
-  * ESLint
-  * Babel Plugins and Presets:
-    1. transform-class-properties
-    2. transform-object-rest-spread
-    3. es-2017 preset (async/await)
- * Redux Thunk
- * CSS Modules
- * Axios
+# Crypto Charts
 
 #### Installation
-After forking/cloning this repo onto your machine, please run the following commands in your terminal to run the app locally:
+
+After cloning this repo onto your machine, please install dependencies by running the following command:
 ```sh
 $ npm install
+```
+
+##### Development
+
+To run the app in development (with Hot Module Reloading):
+```sh
 $ npm run dev
 ```
 Go to http://localhost:8080 in your browser.
+
+##### Production
+
+To run the production build:
+```sh
+$ npm run build
+$ npm start
+```
+Go to http://localhost:3000 in your browser.
+
+##### Docker
+
+To run the app from a Docker container:
+```sh
+$ docker pull jacobworrel/crypto-charts
+$ docker run -p 5000:3000 jacobworrel/crypto-charts
+```
+Go to http://localhost:5000 in your browser.
+
 For tests, please run the following command:
 ```sh
 $ npm test
