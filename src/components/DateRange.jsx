@@ -21,9 +21,9 @@ const DateRange = (props) => {
       </div>
       <form className={styles.form}>
         <label htmlFor="startDate" className={styles.label}>From</label>
-        <input id="startDate" type="date" value={props.startDate}/>
+        <input id="startDate" type="date" value={props.startDate} onChange={props.changeStartDate} />
         <label htmlFor="endDate" className={styles.label}>To</label>
-        <input id="endDate" type="date" value={props.endDate} onChange={() => console.log('changed!')}/>
+        <input id="endDate" type="date" value={props.endDate} onChange={props.changeEndDate} />
       </form>
     </div>
   );

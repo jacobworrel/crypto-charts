@@ -32,24 +32,100 @@ class Container extends Component {
   }
 
   componentDidMount() {
-    this.getData('years');
+    const timeRange = this.getTimeRange();
+    this.getData(timeRange);
+  }
+
+  getTimeRange = (start, end) => {
+    // default time range will be to show past year
+    if (!start) start = moment().subtract(1, 'years');
+    if (!end) end = moment();
+    // invoke getPeriod() to get candlestick period
+    const period = this.getPeriod(start, end);
+    return { start, end, period };
+  }
+
+  // gets candlestick period based on whether timeRange is a year, a month, a week or a day
+  // this determines how many priceData points will go into chart
+  getPeriod(start, end) {
+    const diff = end.diff(start, 'days');
+    let period;
+    if (diff > 1 && diff <= 14) period = 1800;
+    else if (diff > 14 && diff <= 186) period = 7200;
+    else if (diff > 186) period = 86400;
+    else period = 300;
+    console.log('diff -->', diff);
+    console.log('period -->', period);
+    return period;
+  }
+
+  // handles logic to change start date with buttons in DateRange component
+  changeStartDate = (e) => {
+    let startDate;
+    let endDate;
+    if (e.target.nodeName === 'INPUT') {
+      startDate = moment(e.target.value);
+      endDate = moment(this.state.endDate);
+    } else {
+      const activeBtnLabel = e.target.textContent;
+      switch(activeBtnLabel) {
+        case '1y': {
+          startDate = moment().subtract(1, 'years');
+          endDate = moment();
+          break;
+        }
+        case '1m': {
+          startDate = moment().subtract(1, 'months');
+          endDate = moment();
+          break;
+        }
+        case '7d': {
+          startDate = moment().subtract(1, 'weeks');
+          endDate = moment();
+          break;
+        }
+        case '1d': {
+          startDate = moment().subtract(1, 'days');
+          endDate = moment();
+          break;
+        }
+      }
+      // update active button
+      this.setState({ activeBtnLabel });
+    }
+    // calculate new time range with new start date
+    const timeRange = this.getTimeRange(startDate, endDate);
+    // invoke getData() with new time range to get new price data
+    this.getData(timeRange);
+  }
+
+  changeEndDate = (e) => {
+    const startDate = moment(this.state.startDate);
+    let endDate;
+    if (e.target.nodeName === 'INPUT') {
+      endDate = moment(e.target.value);
+    }
+    // calculate new time range with new end date
+    const timeRange = this.getTimeRange(startDate, endDate);
+    // invoke getData() with new time range to get new price data
+    this.getData(timeRange);
   }
 
   // fetches price data from Poloniex API
   async getData(timeRange) {
+    // variables required to fetch price data
     const { symbol } = this.state.currCrypto;
-    // get start and end dates with moment.js
-    const start = moment().subtract(1, timeRange);
-    const end = moment();
-    // format date to unix timestamp for API request
+    const { start, end, period } = timeRange;
+    // format start and end dates to unix timestamp for API request
     const startUnix = start.unix();
     const endUnix = end.unix();
-    // format date to domString for HTML5 date input
+    // format start and end dates to domString for HTML5 date input
     const startString = start.format('YYYY-MM-DD');
     const endString = end.format('YYYY-MM-DD');
 
-    // invoke getPeriod() to get candlestick period
-    const period = this.getPeriod(timeRange);
+    console.log('startString -->', startString);
+    console.log('endString -->', endString);
+
     // fetch price priceData from Poloniex API, passing in appropriate start, end and period values
     const url = `https://poloniex.com/public?command=returnChartData&currencyPair=USDT_${symbol}&start=${startUnix}&end=${endUnix}&period=${period}`
     const response = await fetch(url);
@@ -63,37 +139,16 @@ class Container extends Component {
     this.setState({ priceData, timeRange, startDate: startString, endDate: endString });
   }
 
-  // gets candlestick period based on whether timeRange is a year, a month, a week or a day
-  // this determines how many priceData points will go into chart
-  getPeriod(timeRange) {
-    switch(timeRange) {
-      case 'years': {
-        return 86400;
-      }
-      case 'months': {
-        return 7200;
-      }
-      case 'weeks': {
-        return 1800;
-      }
-      case 'days': {
-        return 300;
-      }
-      default:
-        return 1800;
-    }
-  }
-
   // handles logic to format date scales on XAxis
   formatDateScales = (date) => {
-    switch(this.state.timeRange) {
-      case 'years': {
+    switch(this.state.activeBtnLabel) {
+      case '1y': {
         return moment.unix(date).format('MMM YYYY');
       }
-      case 'months' || 'weeks': {
+      case '1m' || '7d': {
         return moment.unix(date).format('MMM Do');
       }
-      case 'days': {
+      case '1d': {
         return moment.unix(date).format('h a');;
       }
       default:
@@ -103,34 +158,6 @@ class Container extends Component {
   // formats date label in tooltip to show more exact date/time
   formatTooltipLabel = (date) => {
     return moment.unix(date).format('MMMM Do YYYY, h:mm a');
-  }
-
-  // handles logic to change time range in chart
-  changeTimeRange = (e) => {
-    let timeRange;
-    const activeBtnLabel = e.target.textContent;
-    switch(activeBtnLabel) {
-      case '1y': {
-        timeRange = 'years';
-        break;
-      }
-      case '1m': {
-        timeRange = 'months';
-        break;
-      }
-      case '7d': {
-        timeRange = 'weeks';
-        break;
-      }
-      case '1d': {
-        timeRange = 'days';
-        break;
-      }
-    }
-    // invoke getData() with new date range to get new price data
-    this.getData(timeRange);
-    // update active button
-    this.setState({ activeBtnLabel });
   }
 
   changeCrypto = (e) => {
@@ -158,7 +185,9 @@ class Container extends Component {
           startDate={this.state.startDate}
           endDate={this.state.endDate}
           priceData={this.state.priceData}
-          clickHandler={this.changeTimeRange}
+          changeStartDate={this.changeStartDate}
+          changeEndDate={this.changeEndDate}
+          clickHandler={this.changeStartDate}
           formatDateScales={this.formatDateScales}
           formatTooltipLabel={this.formatTooltipLabel}
           activeBtn={this.state.activeBtnLabel}

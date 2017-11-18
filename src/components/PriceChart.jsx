@@ -15,6 +15,8 @@ const PriceChart = (props) => (
         startDate={props.startDate}
         endDate={props.endDate}
         activeBtn={props.activeBtn}
+        changeStartDate={props.changeStartDate}
+        changeEndDate={props.changeEndDate}
         clickHandler={props.clickHandler}
       />
       <LineChart
