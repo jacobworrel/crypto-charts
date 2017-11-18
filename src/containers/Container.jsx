@@ -9,7 +9,7 @@ class Container extends Component {
     this.state = {
       data: [],
       activeBtnLabel: '1y',
-      crypto: {
+      currCrypto: {
         name: 'Ethereum',
         symbol: 'ETH'
       },
@@ -34,7 +34,7 @@ class Container extends Component {
   }
 
   async getData(timeRange) {
-    const { symbol } = this.state.crypto;
+    const { symbol } = this.state.currCrypto;
     const start = moment().subtract(1, timeRange).unix();
     const end = moment().unix();
     // get candlestick period based on whether timeRange is a year, a month, a week or a day
@@ -72,6 +72,7 @@ class Container extends Component {
     }
   }
 
+  // handles logic to format date scales on XAxis
   formatDateScales = (date) => {
     switch(this.state.timeRange) {
       case 'years': {
@@ -87,7 +88,7 @@ class Container extends Component {
         return moment.unix(date).format('MMM Do');
     }
   }
-
+  // formats date label in tooltip to show more exact date/time
   formatTooltipLabel = (date) => {
     return moment.unix(date).format('MMMM Do YYYY, h:mm a');
   }
@@ -120,13 +121,14 @@ class Container extends Component {
   changeCrypto = (e) => {
     const symbol = e.target.textContent;
     const name = this.state.cryptos.reduce((acc, curr) => {
-      console.log('acc-->', acc)
       return curr.symbol === symbol ? curr.name : acc;
     }, '');
-    console.log('symbol-->', symbol)
-    console.log('name-->', name)
-    this.setState({ crypto: { name, symbol }});
-    this.getData('years');
+    // change currCrypto to the one user clicked on and reset active button in this.state
+    // after setState has finished and these variables have been changed, invoke getData() to fetch data from API
+    this.setState(
+      { currCrypto: { name, symbol }, activeBtnLabel: '1y' },
+      () => this.getData('years')
+    );
   }
 
   render() {
@@ -135,7 +137,7 @@ class Container extends Component {
         <Menu
           cryptos={this.state.cryptos}
           clickHandler={this.changeCrypto}
-          activeBtn={this.state.crypto.symbol}
+          activeBtn={this.state.currCrypto.symbol}
         />
         <PriceChart
           data={this.state.data}
@@ -143,8 +145,8 @@ class Container extends Component {
           formatDateScales={this.formatDateScales}
           formatTooltipLabel={this.formatTooltipLabel}
           activeBtn={this.state.activeBtnLabel}
-          cryptoName={this.state.crypto.name}
-          cryptoSymbol={this.state.crypto.symbol}
+          cryptoName={this.state.currCrypto.name}
+          cryptoSymbol={this.state.currCrypto.symbol}
         />
       </div>
     );

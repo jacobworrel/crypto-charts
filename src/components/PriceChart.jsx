@@ -16,8 +16,8 @@ const PriceChart = (props) => (
         clickHandler={props.clickHandler}
       />
       <LineChart
-        width={889}
-        height={382}
+        width={1066}
+        height={458}
         data={props.data}
         margin={{top: 5, right: 30, left: 20, bottom: 5}}>
         <XAxis

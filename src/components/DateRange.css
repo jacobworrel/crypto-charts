@@ -1,6 +1,15 @@
 .container {
   display: flex;
   width: 100%;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
   margin-left: 70px;
+}
+
+.form {
+  margin-right: 100px;
+}
+
+.label {
+  margin: 0 10px;
 }

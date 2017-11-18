@@ -17,7 +17,15 @@ const DateRange = (props) => {
   });
   return (
     <div className={styles.container}>
-      {buttons}
+      <div>
+        {buttons}
+      </div>
+      <div className={styles.form}>
+        <label className={styles.label}>From</label>
+        <input type="date" />
+        <label className={styles.label}>To</label>
+        <input type="date" />
+      </div>
     </div>
   );
 }

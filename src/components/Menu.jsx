@@ -3,8 +3,9 @@ import Button from './Button';
 import styles from './Menu.css';
 
 const Menu = (props) => {
-  const buttons = props.cryptos.map((crypto) => (
+  const buttons = props.cryptos.map((crypto, i) => (
     <Button
+      key={i}
       activeBtn={props.activeBtn}
       clickHandler={props.clickHandler}
       label={crypto.symbol}
