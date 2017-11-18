@@ -7,7 +7,9 @@ class Container extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: [],
+      startDate: '',
+      endDate: '',
+      priceData: [],
       activeBtnLabel: '1y',
       currCrypto: {
         name: 'Ethereum',
@@ -33,26 +35,36 @@ class Container extends Component {
     this.getData('years');
   }
 
+  // fetches price data from Poloniex API
   async getData(timeRange) {
     const { symbol } = this.state.currCrypto;
-    const start = moment().subtract(1, timeRange).unix();
-    const end = moment().unix();
-    // get candlestick period based on whether timeRange is a year, a month, a week or a day
-    // this determines how many data points will go into chart
+    // get start and end dates with moment.js
+    const start = moment().subtract(1, timeRange);
+    const end = moment();
+    // format date to unix timestamp for API request
+    const startUnix = start.unix();
+    const endUnix = end.unix();
+    // format date to domString for HTML5 date input
+    const startString = start.format('YYYY-MM-DD');
+    const endString = end.format('YYYY-MM-DD');
+
+    // invoke getPeriod() to get candlestick period
     const period = this.getPeriod(timeRange);
-    // fetch price data from Poloniex API, passing in appropriate start, end and period values
-    const url = `https://poloniex.com/public?command=returnChartData&currencyPair=USDT_${symbol}&start=${start}&end=${end}&period=${period}`
+    // fetch price priceData from Poloniex API, passing in appropriate start, end and period values
+    const url = `https://poloniex.com/public?command=returnChartData&currencyPair=USDT_${symbol}&start=${startUnix}&end=${endUnix}&period=${period}`
     const response = await fetch(url);
     const json = await response.json();
     // parse json to only include values we need (closing price, date and label for XAxis ticks)
-    const data = json.map(item => {
+    const priceData = json.map(item => {
       const { date, close } = item;
       // get label for XAxis ticks based on whether timeRange is a year, a month, a week or a day
       return { 'Price (USD)': close, date };
     });
-    this.setState({ data, timeRange });
+    this.setState({ priceData, timeRange, startDate: startString, endDate: endString });
   }
 
+  // gets candlestick period based on whether timeRange is a year, a month, a week or a day
+  // this determines how many priceData points will go into chart
   getPeriod(timeRange) {
     switch(timeRange) {
       case 'years': {
@@ -93,6 +105,7 @@ class Container extends Component {
     return moment.unix(date).format('MMMM Do YYYY, h:mm a');
   }
 
+  // handles logic to change time range in chart
   changeTimeRange = (e) => {
     let timeRange;
     const activeBtnLabel = e.target.textContent;
@@ -114,7 +127,9 @@ class Container extends Component {
         break;
       }
     }
+    // invoke getData() with new date range to get new price data
     this.getData(timeRange);
+    // update active button
     this.setState({ activeBtnLabel });
   }
 
@@ -124,7 +139,7 @@ class Container extends Component {
       return curr.symbol === symbol ? curr.name : acc;
     }, '');
     // change currCrypto to the one user clicked on and reset active button in this.state
-    // after setState has finished and these variables have been changed, invoke getData() to fetch data from API
+    // after setState has finished and these variables have been changed, invoke getData() to fetch new priceData from API
     this.setState(
       { currCrypto: { name, symbol }, activeBtnLabel: '1y' },
       () => this.getData('years')
@@ -140,7 +155,9 @@ class Container extends Component {
           activeBtn={this.state.currCrypto.symbol}
         />
         <PriceChart
-          data={this.state.data}
+          startDate={this.state.startDate}
+          endDate={this.state.endDate}
+          priceData={this.state.priceData}
           clickHandler={this.changeTimeRange}
           formatDateScales={this.formatDateScales}
           formatTooltipLabel={this.formatTooltipLabel}

@@ -12,13 +12,15 @@ const PriceChart = (props) => (
     />
     <div>
       <DateRange
+        startDate={props.startDate}
+        endDate={props.endDate}
         activeBtn={props.activeBtn}
         clickHandler={props.clickHandler}
       />
       <LineChart
         width={1066}
         height={458}
-        data={props.data}
+        data={props.priceData}
         margin={{top: 5, right: 30, left: 20, bottom: 5}}>
         <XAxis
           dataKey="date"
