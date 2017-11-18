@@ -6,9 +6,15 @@ import styles from './PriceChart.css';
 
 const PriceChart = (props) => (
   <div className={styles.container}>
-    <ChartTitle title="Ethereum (ETH)"/>
+    <ChartTitle
+      cryptoName={props.cryptoName}
+      cryptoSymbol={props.cryptoSymbol}
+    />
     <div>
-      <DateRange activeBtn={props.activeBtn} handleClick={props.handleClick}/>
+      <DateRange
+        activeBtn={props.activeBtn}
+        clickHandler={props.clickHandler}
+      />
       <LineChart
         width={889}
         height={382}
@@ -25,7 +31,7 @@ const PriceChart = (props) => (
           domain={['auto', 'auto']}
           label={{ value: 'Price (USD)', angle: -90, position: 'insideLeft' }}
         />
-        <CartesianGrid strokeDasharray="3 3"/>
+        <CartesianGrid strokeDasharray="3 3" />
         <Tooltip labelFormatter={props.formatTooltipLabel} />
         <Line
           type="monotone"

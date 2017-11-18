@@ -1,23 +1,25 @@
 import React from 'react';
+import Button from './Button';
 import styles from './DateRange.css';
 
-const DateRange = (props) => (
-  <div className={styles.container}>
-    <button
-      className={props.activeBtn === 'days' ? `${styles.active} ${styles.button}` : styles.button}
-      onClick={() => props.handleClick('days')}>
-      1d
-    </button>
-    <button
-      className={props.activeBtn === 'weeks' ? `${styles.active} ${styles.button}` : styles.button}
-      onClick={() => props.handleClick('weeks')}>7d</button>
-    <button
-      className={props.activeBtn === 'months' ? `${styles.active} ${styles.button}` : styles.button}
-      onClick={() => props.handleClick('months')}>1m</button>
-    <button
-      className={props.activeBtn === 'years' ? `${styles.active} ${styles.button}` : styles.button}
-      onClick={() => props.handleClick('years')}>1y</button>
-  </div>
-);
+const DateRange = (props) => {
+  const labels = ['1d', '7d', '1m', '1y'];
+  const buttons = labels.map((label, i) => {
+    return (
+      <Button
+        key={i}
+        className={props.className}
+        clickHandler={props.clickHandler}
+        label={label}
+        activeBtn={props.activeBtn}
+      />
+    )
+  });
+  return (
+    <div className={styles.container}>
+      {buttons}
+    </div>
+  );
+}
 
 export default DateRange;

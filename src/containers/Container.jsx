@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import Menu from './../components/Menu';
 import PriceChart from './../components/PriceChart';
 
 class Container extends Component {
@@ -7,41 +8,53 @@ class Container extends Component {
     super(props)
     this.state = {
       data: [],
-      range: '',
-      activeBtn: 'years'
+      activeBtnLabel: '1y',
+      crypto: {
+        name: 'Ethereum',
+        symbol: 'ETH'
+      },
+      cryptos: [
+        { name: 'Ethereum', symbol: 'ETH' },
+        { name: 'Bitcoin', symbol: 'BTC' },
+        { name: 'Ripple', symbol: 'XRP' },
+        { name: 'Litecoin', symbol: 'LTC' },
+        { name: 'Dash', symbol: 'DASH' },
+        { name: 'Monero', symbol: 'XMR' },
+        { name: 'Stellar', symbol: 'STR' },
+        { name: 'Ethereum Classic', symbol: 'ETC' },
+        { name: 'Zcash', symbol: 'ZEC' },
+        { name: 'Augur', symbol: 'REP' },
+        { name: 'Nxt', symbol: 'NXT' }
+      ]
     }
-    this.handleClick = this.handleClick.bind(this);
-    this.formatDateScales = this.formatDateScales.bind(this);
-    this.formatTooltipLabel = this.formatTooltipLabel.bind(this);
   }
 
   componentDidMount() {
     this.getData('years');
   }
 
-  async getData(range) {
-    const start = moment().subtract(1, range).unix();
+  async getData(timeRange) {
+    const { symbol } = this.state.crypto;
+    const start = moment().subtract(1, timeRange).unix();
     const end = moment().unix();
-    // get candlestick period based on whether range is a year, a month, a week or a day
+    // get candlestick period based on whether timeRange is a year, a month, a week or a day
     // this determines how many data points will go into chart
-    const period = this.getPeriod(range);
+    const period = this.getPeriod(timeRange);
     // fetch price data from Poloniex API, passing in appropriate start, end and period values
-    const url = `https://poloniex.com/public?command=returnChartData&currencyPair=USDT_ETH&start=${start}&end=${end}&period=${period}`
+    const url = `https://poloniex.com/public?command=returnChartData&currencyPair=USDT_${symbol}&start=${start}&end=${end}&period=${period}`
     const response = await fetch(url);
     const json = await response.json();
     // parse json to only include values we need (closing price, date and label for XAxis ticks)
     const data = json.map(item => {
-      const { date } = item;
-      // round closing price to two decimals
-      const close = +item.close.toFixed(2);
-      // get label for XAxis ticks based on whether range is a year, a month, a week or a day
+      const { date, close } = item;
+      // get label for XAxis ticks based on whether timeRange is a year, a month, a week or a day
       return { 'Price (USD)': close, date };
     });
-    this.setState({ data, range });
+    this.setState({ data, timeRange });
   }
 
-  getPeriod(range) {
-    switch(range) {
+  getPeriod(timeRange) {
+    switch(timeRange) {
       case 'years': {
         return 86400;
       }
@@ -59,8 +72,8 @@ class Container extends Component {
     }
   }
 
-  formatDateScales(date) {
-    switch(this.state.range) {
+  formatDateScales = (date) => {
+    switch(this.state.timeRange) {
       case 'years': {
         return moment.unix(date).format('MMM YYYY');
       }
@@ -75,24 +88,63 @@ class Container extends Component {
     }
   }
 
-  formatTooltipLabel(date) {
+  formatTooltipLabel = (date) => {
     return moment.unix(date).format('MMMM Do YYYY, h:mm a');
   }
 
-  handleClick(range) {
-    this.getData(range);
-    this.setState({ activeBtn: range });
+  changeTimeRange = (e) => {
+    let timeRange;
+    const activeBtnLabel = e.target.textContent;
+    switch(activeBtnLabel) {
+      case '1y': {
+        timeRange = 'years';
+        break;
+      }
+      case '1m': {
+        timeRange = 'months';
+        break;
+      }
+      case '7d': {
+        timeRange = 'weeks';
+        break;
+      }
+      case '1d': {
+        timeRange = 'days';
+        break;
+      }
+    }
+    this.getData(timeRange);
+    this.setState({ activeBtnLabel });
+  }
+
+  changeCrypto = (e) => {
+    const symbol = e.target.textContent;
+    const name = this.state.cryptos.reduce((acc, curr) => {
+      console.log('acc-->', acc)
+      return curr.symbol === symbol ? curr.name : acc;
+    }, '');
+    console.log('symbol-->', symbol)
+    console.log('name-->', name)
+    this.setState({ crypto: { name, symbol }});
+    this.getData('years');
   }
 
   render() {
     return (
       <div>
+        <Menu
+          cryptos={this.state.cryptos}
+          clickHandler={this.changeCrypto}
+          activeBtn={this.state.crypto.symbol}
+        />
         <PriceChart
           data={this.state.data}
-          handleClick={this.handleClick}
+          clickHandler={this.changeTimeRange}
           formatDateScales={this.formatDateScales}
           formatTooltipLabel={this.formatTooltipLabel}
-          activeBtn={this.state.activeBtn}
+          activeBtn={this.state.activeBtnLabel}
+          cryptoName={this.state.crypto.name}
+          cryptoSymbol={this.state.crypto.symbol}
         />
       </div>
     );
