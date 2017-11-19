@@ -2,6 +2,11 @@ import React from 'react';
 import Button from './Button';
 import styles from './DateRange.css';
 
+/**
+* @function DateRange
+* @description React component that renders buttons and custom date form to change time range.
+*/
+
 const DateRange = (props) => {
   // map over labels array to create date range buttons
   const labels = ['1d', '7d', '1m', '1y'];
@@ -31,6 +36,6 @@ const DateRange = (props) => {
       </form>
     </div>
   );
-}
+};
 
 export default DateRange;

@@ -1,9 +1,15 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import ChartTitle from './ChartTitle';
 import DateRange from './DateRange';
 import ErrorMessage from './ErrorMessage';
 import styles from './PriceChart.css';
+
+/**
+* @function PriceChart
+* @description React component that renders ChartTitle, DateRange and LineChart components.
+* Includes conditional logic to render ErrorMessage component if user inputs invalid date range.
+*/
 
 const PriceChart = props => (
   <div className={styles.container}>
