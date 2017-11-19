@@ -1,7 +1,6 @@
 .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  composes: container from "./DateRange.css";
+  justify-content: flex-start;
 }
 
 .thumbnail {

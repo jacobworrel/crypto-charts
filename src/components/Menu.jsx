@@ -14,7 +14,7 @@ const Menu = (props) => {
   ));
   return (
     <div className={styles.container}>
-      <h1>Crypto Charts</h1>
+      <h1>crypto charts</h1>
       <div className={styles.cryptoContainer}>
         {buttons}
       </div>
