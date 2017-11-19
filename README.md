@@ -32,8 +32,3 @@ $ docker pull jacobworrel/crypto-charts
 $ docker run -p 5000:3000 jacobworrel/crypto-charts
 ```
 Go to http://localhost:5000 in your browser.
-
-For tests, please run the following command:
-```sh
-$ npm test
-```
