@@ -7,12 +7,14 @@ class Container extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      priceData: [],
       startDate: '',
       endDate: '',
-      priceData: [],
-      activeBtnLabel: '1y',
       timeRange: 'years',
+      activeBtnLabel: '1y',
       invalidDateRange: false,
+      chartWidth: 1066,
+      chartHeight: 458,
       currCrypto: {
         name: 'Ethereum',
         symbol: 'ETH'
@@ -34,8 +36,19 @@ class Container extends Component {
   }
 
   componentDidMount() {
+    this.setSize();
+    window.onresize = this.setSize;
     const timeRange = this.getTimeRange();
     this.getData(timeRange);
+  }
+
+  // setSize of chart based on width of window
+  setSize = () => {
+    if (window.innerWidth > 1220) this.setState({ chartWidth: 1066, chartHeight: 458 });
+    if (window.innerWidth > 966 && window.innerWidth < 1220) this.setState({ chartWidth: 750, chartHeight: 322.5 });
+    if (window.innerWidth > 775 && window.innerWidth < 966) this.setState({ chartWidth: 600, chartHeight: 258 });
+    if (window.innerWidth > 530 && window.innerWidth < 775) this.setState({ chartWidth: 475, chartHeight: 204.25 });
+    if (window.innerWidth < 530) this.setState({ chartWidth: 350, chartHeight: 150.5 });
   }
 
   // fetches price data from Poloniex API
@@ -202,6 +215,8 @@ class Container extends Component {
           activeBtn={this.state.currCrypto.symbol}
         />
         <PriceChart
+          width={this.state.chartWidth}
+          height={this.state.chartHeight}
           startDate={this.state.startDate}
           endDate={this.state.endDate}
           priceData={this.state.priceData}

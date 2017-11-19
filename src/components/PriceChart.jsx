@@ -1,5 +1,5 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import ChartTitle from './ChartTitle';
 import DateRange from './DateRange';
 import ErrorMessage from './ErrorMessage';
@@ -24,10 +24,11 @@ const PriceChart = props => (
         <ErrorMessage />
       ) : (
         <LineChart
-          width={1066}
-          height={458}
+          width={props.width}
+          height={props.height}
           data={props.priceData}
-          margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        >
           <XAxis
             dataKey="date"
             padding={{ left: 10 }}

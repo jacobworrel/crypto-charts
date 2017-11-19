@@ -9,3 +9,15 @@
 .cryptoContainer {
   margin-left: 80px;
 }
+
+@media only screen and (min-width: 0px) and (max-width: 966px) {
+  .container {
+    flex-direction: column;
+  }
+  .cryptoContainer {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    margin: 0 20px;
+  }
+}
