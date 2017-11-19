@@ -7,7 +7,7 @@ import styles from './PriceChart.css';
 
 const PriceChart = props => (
   <div className={styles.container}>
-    <div>
+    <div className={styles.chartContainer}>
       <ChartTitle
         cryptoName={props.cryptoName}
         cryptoSymbol={props.cryptoSymbol}

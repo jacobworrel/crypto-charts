@@ -3,6 +3,8 @@
   justify-content: flex-start;
 }
 
-.thumbnail {
-  margin-right: 10px;
+@media only screen and (min-width: 0px) and (max-width: 966px) {
+  h2 {
+    font-size: 1.2em;
+  }
 }

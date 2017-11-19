@@ -4,3 +4,15 @@
   align-items: center;
   margin-top: 50px;
 }
+
+
+@media only screen and (min-width: 0px) and (max-width: 966px) {
+  .container {
+    margin-top: 20px;
+  }
+  .chartContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

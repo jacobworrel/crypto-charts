@@ -20,10 +20,14 @@ const DateRange = (props) => {
         {buttons}
       </div>
       <form className={styles.form}>
-        <label htmlFor="startDate" className={styles.label}>From</label>
-        <input id="startDate" type="date" value={props.startDate} onChange={props.changeStartDate} />
-        <label htmlFor="endDate" className={styles.label}>To</label>
-        <input id="endDate" type="date" value={props.endDate} onChange={props.changeEndDate} />
+        <div className={styles.customDate}>
+          <label htmlFor="startDate" className={styles.label}>From:</label>
+          <input type="date" value={props.startDate} onChange={props.changeStartDate} />
+        </div>
+        <div className={styles.customDate}>
+          <label htmlFor="endDate" className={styles.label}>To:</label>
+          <input type="date" value={props.endDate} onChange={props.changeEndDate} />
+        </div>
       </form>
     </div>
   );
