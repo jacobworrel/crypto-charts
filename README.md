@@ -33,6 +33,6 @@ Go to http://localhost:3000 in your browser.
 To run the app from a Docker container:
 ```sh
 $ docker pull jacobworrel/crypto-charts
-$ docker run -p 5000:80 jacobworrel/crypto-charts
+$ docker run -p 5000:3000 jacobworrel/crypto-charts
 ```
 Go to http://localhost:5000 in your browser.

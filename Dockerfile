@@ -12,8 +12,8 @@ RUN npm install
 RUN npm run build
 RUN npm prune --prodution
 
-# Make port 80 available to the world outside this container
-EXPOSE 80
+# Make port 3000 available to the world outside this container
+EXPOSE 3000
 
 # Define environment variable
 ENV NODE_ENV production
