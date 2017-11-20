@@ -1,5 +1,9 @@
 # Crypto Charts
 
+![Crypto Charts](https://s8.postimg.org/u9l9noxxx/crypto-charts.png)
+
+App is currently live [here](crypto-charts-536325b4-1.9ee7f6c6.cont.dockerapp.io:32769).
+
 #### Installation
 
 After cloning this repo onto your machine, please install dependencies by running the following command:
