@@ -10,7 +10,7 @@ ADD . /app
 # Install any needed packages
 RUN npm install
 RUN npm run build
-RUN npm prune --prodution
+RUN npm prune --production
 
 # Make port 80 available to the world outside this container
 EXPOSE 80
